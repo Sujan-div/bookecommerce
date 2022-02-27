@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Http;
+<ul class="">
+    @if (@Context.Session.GetString("role") == "admin")
+    
+        {
+            <li>
+                <a class="" asp-controller="" asp-action="">
+
+                    <span class="">Add Book Category</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a class="" asp-controller="" asp-action="">
+
+                    <span class="">Add Book</span>
+                </a>
+
+            </li>
+
+        }
+
+
+
+    </ul>
