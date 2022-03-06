@@ -55,7 +55,7 @@ namespace bookecommercewebsite
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Customerfunctions}/{action=Index}/{id?}");
             });
         }
     }

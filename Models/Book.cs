@@ -12,6 +12,8 @@ namespace bookecommercewebsite.Models
         public string Bookauthor { get; set; }
         public string Bookprice { get; set; }
         public int? Bookcatid { get; set; }
+
+        public string Bookcatname { get; set; }
         public byte[] Bookimage { get; set; }
     }
 }
