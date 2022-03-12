@@ -1,5 +1,6 @@
 ﻿using bookecommercewebsite.Models;
 using Dapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,13 +16,23 @@ namespace bookecommercewebsite.Controllers
 {
     public class bookController : Controller
     {
+       
+        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly bookecommerceContext adb;
+
+        public bookController(IWebHostEnvironment hostEnvironment)
+        {
+           
+            webHostEnvironment = hostEnvironment;
+            
+        }
         public IActionResult Index()
         {
             if (HttpContext.Session.GetString("role") == "admin")
             {
                 IDbConnection connection = new SqlConnection(Dapper.Connection);
                 connection.Open();
-                var data = connection.Query<Book>("select book.bookid, book.bookname, book.bookauthor, book.bookprice, bookcat.bookcatname from book inner join bookcat on book.bookcatid = bookcat.bookcatid");
+                var data = connection.Query<Book>("select book.bookid, book.bookname, book.bookauthor, book.bookprice, book.bookimage, bookcat.bookcatname from book inner join bookcat on book.bookcatid = bookcat.bookcatid");
                 return View(data);
             }
             else
@@ -48,7 +60,7 @@ namespace bookecommercewebsite.Controllers
 
         // POST: Customer/Create
         [HttpPost]
-        public ActionResult Create(Book book)
+        public async Task<IActionResult> Create(Book book, IFormFile ifile)
         {
 
             if (HttpContext.Session.GetString("role") == "admin")
@@ -56,16 +68,30 @@ namespace bookecommercewebsite.Controllers
 
                 try
                 {
+
+
                     using (IDbConnection db = new SqlConnection(Dapper.Connection))
                     {
-                        var bookdata = db.Query<Bookcat>("select * from bookcat").ToList();
-                        ViewBag.TotalSubs = new SelectList(bookdata, "Bookcatid", "Bookcatname");
-                        db.Open();
-                        string sqlQuery = "Insert Into book ( Bookname, Bookauthor, Bookprice, Bookcatid) Values( @Bookname, @Bookauthor, @Bookprice, @Bookcatid)";
+                        string imgext = Path.GetExtension(ifile.FileName);
+                        if (imgext == ".jpg" || imgext == ".gif")
+                        {
+                            var saveimg = Path.Combine(webHostEnvironment.WebRootPath, ("Images"), ifile.FileName);
+                            var stream = new FileStream(saveimg, FileMode.Create);
+                            await ifile.CopyToAsync(stream);
 
-                        var rowsAffected = db.Execute(sqlQuery, new { Bookname = book.Bookname, Bookauthor = book.Bookauthor, Bookprice = book.Bookprice, Bookcatid = book.Bookcatid });
+                            book.Bookimage = ifile.FileName;
+                            
+
+
+                            var bookdata = db.Query<Bookcat>("select * from bookcat").ToList();
+                            ViewBag.TotalSubs = new SelectList(bookdata, "Bookcatid", "Bookcatname");
+                            db.Open();
+                            string sqlQuery = "Insert Into book ( Bookname, Bookauthor, Bookprice, Bookimage, Bookcatid) Values( @Bookname, @Bookauthor, @Bookprice, @Bookimage, @Bookcatid)";
+
+                            var rowsAffected = db.Execute(sqlQuery, new { Bookname = book.Bookname, Bookauthor = book.Bookauthor, Bookprice = book.Bookprice, Bookimage = book.Bookimage, Bookcatid = book.Bookcatid });
+                        }
                     }
-
+                    
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -101,7 +127,7 @@ namespace bookecommercewebsite.Controllers
 
         // POST: Customer/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, Book books)
+        public async Task<IActionResult> Edit(int id, Book books, IFormFile ifile)
         {
             if (HttpContext.Session.GetString("role") == "admin")
             {
@@ -109,19 +135,30 @@ namespace bookecommercewebsite.Controllers
                 {
                     using (IDbConnection db = new SqlConnection(Dapper.Connection))
                     {
-                        var bookdata = db.Query<Bookcat>("select * from bookcat").ToList();
-                        ViewBag.TotalSubs = new SelectList(bookdata, "Bookcatid", "Bookcatname");
-                        string sqlQuery = "UPDATE book set Bookname='" + books.Bookname +
-                 "',Bookauthor='" + books.Bookauthor +
-                 "',Bookprice='" + books.Bookprice +
-                 "',Bookcatid='" + books.Bookcatid +
-                 "' WHERE Bookid=" + books.Bookid;
+                        string imgext = Path.GetExtension(ifile.FileName);
+                        if (imgext == ".jpg" || imgext == ".gif")
+                        {
+                            var saveimg = Path.Combine(webHostEnvironment.WebRootPath, ("Images"), ifile.FileName);
+                            var stream = new FileStream(saveimg, FileMode.Create);
+                            await ifile.CopyToAsync(stream);
 
-                        int rowsAffected = db.Execute(sqlQuery);
+                            books.Bookimage = ifile.FileName;
+
+                            var bookdata = db.Query<Bookcat>("select * from bookcat").ToList();
+                            ViewBag.TotalSubs = new SelectList(bookdata, "Bookcatid", "Bookcatname");
+                            string sqlQuery = "UPDATE book set Bookname='" + books.Bookname +
+                     "',Bookauthor='" + books.Bookauthor +
+                     "',Bookprice='" + books.Bookprice +
+                     "',Bookimage='" + books.Bookimage +
+                     "',Bookcatid='" + books.Bookcatid +
+                     "' WHERE Bookid=" + books.Bookid;
+
+                            int rowsAffected = db.Execute(sqlQuery);
+                        }
                     }
-
-                    return RedirectToAction("Index");
-                }
+                        return RedirectToAction("Index");
+                    }
+                
                 catch (Exception ex)
                 {
                     return View();

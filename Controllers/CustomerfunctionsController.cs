@@ -18,7 +18,7 @@ namespace bookecommercewebsite.Controllers
           
                 IDbConnection connection = new SqlConnection(Dapper.Connection);
                 connection.Open();
-                var data = connection.Query<Book>("select book.bookid, book.bookname, book.bookauthor, book.bookprice, bookcat.bookcatname from book inner join bookcat on book.bookcatid = bookcat.bookcatid");
+                var data = connection.Query<Book>("select book.bookid, book.bookname, book.bookauthor, book.bookprice, book.bookimage, bookcat.bookcatname from book inner join bookcat on book.bookcatid = bookcat.bookcatid");
                 return View(data);
            
 

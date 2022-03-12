@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -14,6 +15,6 @@ namespace bookecommercewebsite.Models
         public int? Bookcatid { get; set; }
 
         public string Bookcatname { get; set; }
-        public byte[] Bookimage { get; set; }
+        public string Bookimage { get; set; }
     }
 }

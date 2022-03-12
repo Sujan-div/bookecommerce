@@ -24,9 +24,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Bookcatname)
             </th>
-            @*<th>
+            <th>
                 @Html.DisplayNameFor(model => model.Bookimage)
-            </th>*@
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -45,9 +45,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Bookcatname)
             </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.Bookimage)
-            </td>*@
+            <td>
+                <img src="~/images/@Html.DisplayFor(modelItem => item.Bookimage)" height="80" width="120"/>
+            </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Bookid">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Bookid">Details</a> |
