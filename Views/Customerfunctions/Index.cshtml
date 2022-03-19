@@ -1,4 +1,5 @@
-﻿@{Layout = null; }
+﻿@using Microsoft.AspNetCore.Http;
+@{Layout = null; }
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -43,7 +44,7 @@
                                 <span class="admin_name">Sign up</span>
                             </a>
                         </li>
-                        
+
                     </ul>
                 </nav>
 
@@ -111,7 +112,7 @@
                 <!-- About Us -->
                 <header id="inner">
                     <h1>Find your new book!</h1>
-                    
+
                 </header>
 
                 <br>
@@ -128,43 +129,41 @@
 
 
                 @*<p>
-            <a asp-action="Create">Create New</a>
-        </p>*@
-            <div class="row">
-                @foreach (var book in Model)
-                {
-                    <div class="col-4">
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h4 class="my-0 font-weight-normal">
-                                    <label style="font-size:23px;color: steelblue">@book.Bookname</label>
+                        <a asp-action="Create">Create New</a>
+                    </p>*@
+                <div class="row">
+                    @foreach (var book in Model)
+                    {
+                        <div class="col-4">
+                            <div class="card mb-4">
+                                <div class="card-header">
 
-                                </h4>
-                                <img src="~/images/@book.Bookimage" alt="Card Image" height="300" width="120" class="card-img-top"/>
-                                <p>@book.Bookauthor</p>
-                                <p>@book.Bookprice</p>
-                                <p>@book.Bookcatname</p>
+                                    <img src="~/images/@book.Bookimage" alt="Card Image" height="200" width="120" class="card-img-top" />
+                                    <label style="font-size:23px;color: steelblue"><b>Name:&nbsp;</b>@book.Bookname</label>
+                                    <p><b>Author:&nbsp;</b>@book.Bookauthor</p>
+                                    <p><b>Price:&nbsp;</b>@book.Bookprice</p>
+                                    <p><b>Category:&nbsp;</b>@book.Bookcatname</p>
 
 
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
-            </div>
-               
+                    }
+                </div>
 
-               
 
-               
 
-              
+
+
+
+
 
                 <br>
 
-              
-                
 
-                
+
+
+
 
 
             </div>

@@ -1,5 +1,6 @@
 ﻿using bookecommercewebsite.Models;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System;
@@ -46,5 +47,40 @@ namespace bookecommercewebsite.Controllers
             }
 
         }
+
+        public ActionResult Edit(int id)
+        {
+            User user = new User();
+            string sql = "select * from [user] where userid=@userid";
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@userid", HttpContext.Session.GetString("userid"));
+
+
+            var data = Class1.RunQuery<User>(sql, parameters).SingleOrDefault();
+            return View(data);
+        }
+        [HttpPost]
+        public ActionResult Edit(int id, User user)
+        {
+
+
+            string sqlQuery = "UPDATE [user] set username=@username, useraddress=@useraddress, useremail=@useremail, usercontact=@usercontact, userpassword=@userpassword WHERE userid=@userid";
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@username", user.Username);
+            parameters.Add("@useraddress", user.Useraddress);
+            parameters.Add("@useremail", user.Useremail);
+            parameters.Add("@usercontact", user.Usercontact);
+            parameters.Add("@userpassword", user.Userpassword);
+            parameters.Add("@userid",HttpContext.Session.GetString("userid"));
+
+            var data = Class1.RunQuery<User>(sqlQuery, parameters);
+
+
+            return RedirectToAction(controllerName: "Login", actionName: "Index");
+
+        }
+
+
     }
 }

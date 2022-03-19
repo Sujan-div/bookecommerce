@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using bookecommercewebsite.Models;
+using Dapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,13 @@ namespace bookecommercewebsite.Controllers
     public class LoginController : Controller
     {
 
-
+        public IActionResult Success()
+        {
+            IDbConnection connection = new SqlConnection(Dapper.Connection);
+            connection.Open();
+            var data = connection.Query<Book>("select book.bookid, book.bookname, book.bookauthor, book.bookprice, book.bookimage, bookcat.bookcatname from book inner join bookcat on book.bookcatid = bookcat.bookcatid");
+            return View(data);
+        }
 
         //returns view of login page
         public IActionResult Index()
@@ -62,7 +69,7 @@ namespace bookecommercewebsite.Controllers
                     HttpContext.Session.SetString("username", username);
                     HttpContext.Session.SetString("role", roledata);
                     HttpContext.Session.SetString("userid", iddata);
-                    return View("Success");
+                    return RedirectToAction(controllerName: "Users", actionName: "Index");
                 }
                 else
                 {

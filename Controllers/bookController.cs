@@ -16,15 +16,15 @@ namespace bookecommercewebsite.Controllers
 {
     public class bookController : Controller
     {
-       
+
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly bookecommerceContext adb;
 
         public bookController(IWebHostEnvironment hostEnvironment)
         {
-           
+
             webHostEnvironment = hostEnvironment;
-            
+
         }
         public IActionResult Index()
         {
@@ -80,7 +80,7 @@ namespace bookecommercewebsite.Controllers
                             await ifile.CopyToAsync(stream);
 
                             book.Bookimage = ifile.FileName;
-                            
+
 
 
                             var bookdata = db.Query<Bookcat>("select * from bookcat").ToList();
@@ -91,7 +91,7 @@ namespace bookecommercewebsite.Controllers
                             var rowsAffected = db.Execute(sqlQuery, new { Bookname = book.Bookname, Bookauthor = book.Bookauthor, Bookprice = book.Bookprice, Bookimage = book.Bookimage, Bookcatid = book.Bookcatid });
                         }
                     }
-                    
+
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -115,7 +115,7 @@ namespace bookecommercewebsite.Controllers
                 {
                     var bookdata = db.Query<Bookcat>("select * from bookcat").ToList();
                     ViewBag.TotalSubs = new SelectList(bookdata, "Bookcatid", "Bookcatname");
-                    book = db.Query<Book>("select book.bookid, book.bookname, book.bookauthor, book.bookprice, bookcat.bookcatname from book inner join bookcat on book.bookcatid = bookcat.bookcatid WHERE Bookid =" + id, new { id }).SingleOrDefault();//only takes single value or default value
+                    book = db.Query<Book>("select book.bookid, book.bookname, book.bookauthor, book.bookprice, book.bookimage, bookcat.bookcatname from book inner join bookcat on book.bookcatid = bookcat.bookcatid WHERE Bookid =" + id, new { id }).SingleOrDefault();//only takes single value or default value
                 }
                 return View(book);
             }
@@ -131,45 +131,46 @@ namespace bookecommercewebsite.Controllers
         {
             if (HttpContext.Session.GetString("role") == "admin")
             {
-                try
+
+
+
+                string imgext = Path.GetExtension(ifile.FileName);
+                if (imgext == ".jpg" || imgext == ".gif")
                 {
+                    var a = DateTime.Now.Ticks + ifile.FileName;
+                    var saveimg = Path.Combine(webHostEnvironment.WebRootPath, ("Images"), a);
+                    var stream = new FileStream(saveimg, FileMode.Create);
+                    await ifile.CopyToAsync(stream);
+
+                    books.Bookimage = a;
                     using (IDbConnection db = new SqlConnection(Dapper.Connection))
                     {
-                        string imgext = Path.GetExtension(ifile.FileName);
-                        if (imgext == ".jpg" || imgext == ".gif")
-                        {
-                            var saveimg = Path.Combine(webHostEnvironment.WebRootPath, ("Images"), ifile.FileName);
-                            var stream = new FileStream(saveimg, FileMode.Create);
-                            await ifile.CopyToAsync(stream);
-
-                            books.Bookimage = ifile.FileName;
-
-                            var bookdata = db.Query<Bookcat>("select * from bookcat").ToList();
-                            ViewBag.TotalSubs = new SelectList(bookdata, "Bookcatid", "Bookcatname");
-                            string sqlQuery = "UPDATE book set Bookname='" + books.Bookname +
-                     "',Bookauthor='" + books.Bookauthor +
-                     "',Bookprice='" + books.Bookprice +
-                     "',Bookimage='" + books.Bookimage +
-                     "',Bookcatid='" + books.Bookcatid +
-                     "' WHERE Bookid=" + books.Bookid;
-
-                            int rowsAffected = db.Execute(sqlQuery);
-                        }
+                        var bookdata = db.Query<Bookcat>("select * from bookcat").ToList();
+                        ViewBag.TotalSubs = new SelectList(bookdata, "Bookcatid", "Bookcatname");
                     }
-                        return RedirectToAction("Index");
-                    }
-                
-                catch (Exception ex)
-                {
-                    return View();
+
+                    string sqlQuery = "UPDATE book set bookname=@bookname, bookauthor=@bookauthor, bookprice=@bookprice, bookimage=@bookimage, bookcatid=@bookcatid WHERE bookid=@bookid";
+
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("@bookname", books.Bookname);
+                    parameters.Add("@bookauthor", books.Bookauthor);
+                    parameters.Add("@bookprice", books.Bookprice);
+                    parameters.Add("@bookimage", books.Bookimage);
+                    parameters.Add("@bookcatid", books.Bookcatid);
+                    parameters.Add("@bookid", id);
+
+                    var data = Class1.RunQuery<Book>(sqlQuery, parameters);
+                    
                 }
+
             }
             else
             {
                 return RedirectToAction(controllerName: "Login", actionName: "Index");
             }
+            return RedirectToAction("Index");
         }
-
+    
         public ActionResult Details(int id)
         {
             if (HttpContext.Session.GetString("role") == "admin")
