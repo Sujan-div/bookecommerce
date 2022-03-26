@@ -28,7 +28,12 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Bookprice)
         </dd>
-
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Bookcatid)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Bookcatid)
+        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Bookcatname)
         </dt>
@@ -44,6 +49,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Bookid">Edit</a> |
+    @*<a asp-action="Edit" asp-route-id="@Model.Bookid">Edit</a> |*@
+    <a asp-action="addtocart" asp-route-id="@Model.Bookid">Add to Cart</a>
     <a asp-action="Index">Back to List</a>
 </div>

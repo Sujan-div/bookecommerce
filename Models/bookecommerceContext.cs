@@ -21,6 +21,10 @@ namespace bookecommercewebsite.Models
         public virtual DbSet<Bookcat> Bookcats { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
+        public virtual DbSet<Cart> Carts { get; set; }
+
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

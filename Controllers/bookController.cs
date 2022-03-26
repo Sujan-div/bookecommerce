@@ -179,7 +179,7 @@ namespace bookecommercewebsite.Controllers
                 using (IDbConnection db = new SqlConnection(Dapper.Connection))
                 {
 
-                    book = db.Query<Book>("select book.bookid, book.bookname, book.bookauthor, book.bookprice, bookcat.bookcatname from book inner join bookcat on book.bookcatid = bookcat.bookcatid WHERE Bookid =" + id, new { id }).SingleOrDefault();//only takes single value or default value
+                    book = db.Query<Book>("select book.bookid, book.bookname, book.bookauthor, book.bookprice, book.bookimage, bookcat.bookcatname from book inner join bookcat on book.bookcatid = bookcat.bookcatid WHERE Bookid =" + id, new { id }).SingleOrDefault();//only takes single value or default value
                 }
                 return View(book);
             }
@@ -202,6 +202,7 @@ namespace bookecommercewebsite.Controllers
                         string sqlQuery = "Select book from Bookname='" + book.Bookname +
                              "',Bookauthor='" + book.Bookauthor +
                              "',Bookprice='" + book.Bookprice +
+                             "',Bookimage='" + book.Bookprice +
                               "',Bookcatname='" + book.Bookcatname +
                              "' WHERE Bookid=" + id;
 
