@@ -13,16 +13,14 @@ namespace bookecommercewebsite.Controllers
 {
     public class cartController : Controller
     {
-        public IActionResult Index(int id)
+        public IActionResult Index()
         {
-           Cart cart = new Cart();
-            using (IDbConnection db = new SqlConnection(Dapper.Connection))
-            {
-                IDbConnection connection = new SqlConnection(Dapper.Connection);
-                connection.Open();
-                cart = db.Query<Cart>("select book.bookid, book.bookname, book.bookauthor, book.bookprice, book.bookimage from book inner join book on cart.bookid = book.bookid WHERE Bookid =" + id, new { id }).SingleOrDefault();//only takes single value or default value
-            }
-            return View(cart);
+            
+            
+            IDbConnection connection = new SqlConnection(Dapper.Connection);
+            connection.Open();
+            var data = connection.Query<Cart>("select cart.userid, cart.bookid, book.bookname, book.bookauthor, book.bookprice, book.bookimage from cart join book on cart.bookid = book.bookid where userid= "+  HttpContext.Session.GetString("userid"));
+            return View(data);
         }
 
         public IActionResult addtocart(int id)

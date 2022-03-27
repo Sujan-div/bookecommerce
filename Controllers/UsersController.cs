@@ -73,15 +73,8 @@ namespace bookecommercewebsite.Controllers
                 return RedirectToAction(controllerName: "Login", actionName: "Index");
             }
         }
-        public IActionResult cartpage()
-        {
-
-            IDbConnection connection = new SqlConnection(Dapper.Connection);
-            connection.Open();
-            var data = connection.Query<Cart>("select * from cart");
-            return View(data);
-
-        }
+      
+        
 
         public IActionResult addtocart(int id)
         {
@@ -92,7 +85,7 @@ namespace bookecommercewebsite.Controllers
                 var rowsAffected = db.Execute(sqlQuery, new { bookid = id, userid = HttpContext.Session.GetString("userid") });
 
             }
-            return View("cartpage");
+            return RedirectToAction(controllerName: "cart", actionName: "Index");
         }
 
       
