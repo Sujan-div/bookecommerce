@@ -16,5 +16,7 @@
         public string Bookprice { get; set; }
 
         public string Bookimage { get; set; }
+
+        public int Quantity { get; set; }
     }
 }

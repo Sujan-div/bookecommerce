@@ -23,14 +23,27 @@ namespace bookecommercewebsite.Controllers
             return View(data);
         }
 
+     
         public IActionResult addtocart(int id)
         {
             using (IDbConnection db = new SqlConnection(Dapper.Connection))
             {
-                string sqlQuery = "Insert Into cart ( bookid, userid) Values( @bookid, @userid)";
+                string sqlQuery = "Insert Into cart ( bookid, userid, quantity) Values( @bookid, @userid, @quantity)";
 
-                var rowsAffected = db.Execute(sqlQuery, new { bookid = id, userid = HttpContext.Session.GetString("userid") });
+                var rowsAffected = db.Execute(sqlQuery, new { bookid = id, userid = HttpContext.Session.GetString("userid"), quantity = 1 });
           
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Order(int id)
+        {
+            using (IDbConnection db = new SqlConnection(Dapper.Connection))
+            {
+                string sqlQuery = "Insert Into cart ( bookid, userid, quantity) Values( @bookid, @userid, @quantity)";
+
+                var rowsAffected = db.Execute(sqlQuery, new { bookid = id, userid = HttpContext.Session.GetString("userid"), quantity = 1 });
+
             }
             return RedirectToAction("Index");
         }

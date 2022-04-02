@@ -76,6 +76,15 @@
                                 </a>
                             }
                         </li>
+                        <li>
+                            @if (@Context.Session.GetString("role") == "customer")
+                            {
+                                <a class="" asp-controller="cart" asp-action="Index">
+                                    <span class="admin_name">Cart</span>
+                                </a>
+                            }
+
+                        </li>
 
                     </ul>
                 </nav>

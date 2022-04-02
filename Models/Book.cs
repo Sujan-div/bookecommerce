@@ -29,5 +29,7 @@ namespace bookecommercewebsite.Models
 
         [Display(Name = "Book Image:")]
         public string Bookimage { get; set; }
+
+        public int Bookquantity { get; set; }
     }
 }
