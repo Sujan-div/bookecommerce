@@ -78,21 +78,40 @@ namespace bookecommercewebsite.Controllers
 
         public IActionResult addtocart(int id, Book book)
         {
+
           
-           
+
             using (IDbConnection db = new SqlConnection(Dapper.Connection))
             {
                 try
                 {
-                    string sqlQuery = "Insert Into cart ( bookid, userid, quantity) Values( @bookid, @userid, @quantity)";
+                    string sqlQuery = "Insert Into cart ( bookid, userid, quantity, status) Values( @bookid, @userid, @quantity, @status)";
 
-                    var rowsAffected = db.Execute(sqlQuery, new { bookid = id, userid = HttpContext.Session.GetString("userid"), quantity = 1 });
+                    var rowsAffected = db.Execute(sqlQuery, new { bookid = id, userid = HttpContext.Session.GetString("userid"), quantity = 1, status = 0 });
+
+
+                    //var sqlQuery1 = "select status from cart where userid = @userid";
+                    //var rowsAffected1 = db.Execute(sqlQuery1, new { userid = HttpContext.Session.GetString("userid") });
+                    //var data = db.ExecuteReader(sqlQuery1);
+                    //data.Read();
+                    //var statusdata = data["status"].ToString();
+                    //HttpContext.Session.SetString("status", statusdata);
+
+
+
+
+
+
+
                 }
-                catch(Exception ee)
+                catch (Exception ee)
                 {
                     ViewBag.error = "The Book is already in the cart";
                    
                 }
+
+
+               
             }
             return RedirectToAction(controllerName: "cart", actionName: "Index");
         }

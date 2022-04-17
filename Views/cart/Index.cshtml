@@ -1,4 +1,5 @@
-﻿@model IEnumerable<bookecommercewebsite.Models.Cart>
+﻿@using Microsoft.AspNetCore.Http;
+@model IEnumerable<bookecommercewebsite.Models.Cart>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,21 +10,28 @@
 <div class="row">
     @foreach (var book in Model)
     {
-        <div class="col-4">
-            <div class="card mb-4">
-                <div class="card-header">
+       
+            <div class="col-4">
+                <div class="card mb-4">
+                    <div class="card-header">
 
-                    <img src="~/images/@book.Bookimage" alt="Card Image" height="200" width="120" class="card-img-top" />
-                    <label style="font-size:23px;color: steelblue"><b>Name:&nbsp;</b>@book.Bookname</label>
-                    <p><b>Author:&nbsp;</b>@book.Bookauthor</p>
-                    <p><b>Price:&nbsp;</b>@book.Bookprice</p>
-                    
+                        <img src="~/images/@book.Bookimage" alt="Card Image" height="200" width="120" class="card-img-top" />
+                        <label style="font-size:23px;color: steelblue"><b>Name:&nbsp;</b>@book.Bookname</label>
+                        <p><b>Author:&nbsp;</b>@book.Bookauthor</p>
+                        <p><b>Price:&nbsp;</b>@book.Bookprice</p>
 
-                    <a asp-action="order" asp-route-id="@book.Bookid">Order</a>
 
+                        @*<a asp-action="Checkout" asp-route-id="@book.Bookid">Checkout</a>*@
+                        
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
-<a>Checkout</a> 
+            
+        }
+
+
+
+
+
+        <a asp-action="Checkout">Checkout</a>
+    </div>

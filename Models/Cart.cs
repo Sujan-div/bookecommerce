@@ -18,5 +18,7 @@
         public string Bookimage { get; set; }
 
         public int Quantity { get; set; }
+
+        public int Status { get; set; }
     }
 }

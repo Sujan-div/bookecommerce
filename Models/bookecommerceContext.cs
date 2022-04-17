@@ -23,7 +23,7 @@ namespace bookecommercewebsite.Models
 
         public virtual DbSet<Cart> Carts { get; set; }
 
-
+        public virtual DbSet<Order> Orders { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

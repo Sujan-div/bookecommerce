@@ -1,121 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Http;
-@{Layout = null; }
-<!DOCTYPE HTML>
-<html>
-<head>
-    <title>PHPJabbers.com | Free Book Online Store Website Template</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/main.css" />
-    <noscript><link rel="stylesheet" href="css/noscript.css" /></noscript>
-</head>
-<body class="is-preload">
-    <!-- Wrapper -->
-    <div id="wrapper">
-
-        <!-- Header -->
-        <header id="header">
-            <div class="inner">
-
-                <!-- Logo -->
-                <a href="index.html" class="logo">
-                    <span class="fa fa-book"></span> <span class="title">Book Online Store Website</span>
-                </a>
-
-                <!-- Nav -->
-                <nav>
-                    <div class="profile-details">
 
 
 
-
-
-
-                    </div>
-                    <ul>
-                        <li>
-                            @if (@Context.Session.GetString("role") == "customer")
-                            {
-                                <a class="" asp-controller="Register" asp-action="Edit">
-
-                                    <span class="admin_name">@Context.Session.GetString("username")</span>
-                                </a>
-                            }
-                            else if (@Context.Session.GetString("role") == "admin")
-                            {
-                                <a class="" asp-controller="Register" asp-action="Edit">
-
-                                    <span class="admin_name">@Context.Session.GetString("username")</span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a class="" asp-controller="login" asp-action="Index">
-                                    <span class="admin_name">Login</span>
-                                </a>
-                            }
-                        </li>
-                        <li>
-                            @if (@Context.Session.GetString("role") == "customer")
-                            {
-                                <a class="" asp-controller="Login" asp-action="Logout">
-                                    <span class="admin_name">Log out</span>
-                                </a>
-                            }
-                            else if (@Context.Session.GetString("role") == "admin")
-                            {
-                                <a class="" asp-controller="Login" asp-action="Logout">
-                                    <span class="admin_name">Log out</span>
-                                </a>
-                            }
-                            else
-                            {
-                                <a class="" asp-controller="register" asp-action="Create">
-                                    <span class="admin_name">Sign up</span>
-                                </a>
-                            }
-                        </li>
-                        <li>
-                            @if (@Context.Session.GetString("role") == "customer")
-                            {
-                                <a class="" asp-controller="cart" asp-action="Index">
-                                    <span class="admin_name">Cart</span>
-                                </a>
-                            }
-
-                        </li>
-
-                    </ul>
-                </nav>
-
-            </div>
-        </header>
-
-        <!-- Menu -->
-        <nav id="menu">
-            <h2>Menu</h2>
-            <ul>
-                <li><a href="index.html" class="active">Home</a></li>
-
-                <li><a href="products.html">Products</a></li>
-
-                <li><a href="checkout.html">Checkout</a></li>
-
-                <li>
-                    <a href="#" class="dropdown-toggle">About</a>
-
-                    <ul>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="testimonials.html">Testimonials</a></li>
-                        <li><a href="terms.html">Terms</a></li>
-                    </ul>
-                </li>
-
-                <li><a href="contact.html">Contact Us</a></li>
-            </ul>
-        </nav>
+       
         @if (@Context.Session.GetString("role") == "customer")
         {
             <!-- Main -->
@@ -294,7 +181,13 @@
 
                     </li>
 
+                    <li>
+                        <a class="" asp-controller="order" asp-action="Index">
 
+                            <span class="">View Order</span>
+                        </a>
+
+                    </li>
 
 
 
@@ -483,6 +376,6 @@
     <script src="assets/js/jquery.scrollex.min.js"></script>
     <script src="assets/js/main.js"></script>
 
-</body>
+
 </html>
                         

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<bookecommercewebsite.Models.Cart>
+
+@{
+    ViewData["Title"] = "ViewOrder";
+}
+
+<h1>ViewOrder</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Userid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookauthor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookprice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bookimage)
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bookid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Userid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bookname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bookauthor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bookprice)
+            </td>
+            <td>
+                <img src="~/images/@Html.DisplayFor(modelItem => item.Bookimage)" height="80" width="120" />
+            </td>
+           
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Cartid">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Cartid">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Cartid">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
