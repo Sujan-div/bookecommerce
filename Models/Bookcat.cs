@@ -10,6 +10,7 @@ namespace bookecommercewebsite.Models
     {
         public int Bookcatid { get; set; }
 
+        [Required]
         [Display(Name = "Book Category:")]
         public string Bookcatname { get; set; }
     }

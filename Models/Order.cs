@@ -37,6 +37,6 @@ namespace bookecommercewebsite.Models
         public string Email { get; set; }
 
         [Required]
-        public int Phonenumber { get; set; }
+        public string Phonenumber { get; set; }
     }
 }

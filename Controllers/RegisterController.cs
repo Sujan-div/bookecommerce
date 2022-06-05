@@ -77,7 +77,7 @@ namespace bookecommercewebsite.Controllers
             var data = Class1.RunQuery<User>(sqlQuery, parameters);
 
 
-            return RedirectToAction(controllerName: "Login", actionName: "Index");
+            return RedirectToAction(controllerName: "Users", actionName: "Index");
 
         }
 

@@ -20,7 +20,7 @@ namespace bookecommercewebsite.Controllers
             connection.Open();
 
             //var data = connection.Query<Cart>("select cart.userid, cart.bookid, book.bookname, book.bookauthor, book.bookprice, book.bookimage from cart join book on cart.bookid = book.bookid where status = "+ Status);
-            var data = connection.Query<Order>("select [order].userid, [order].bookid, book.bookname, [order].quantity, [order].status, [order].fullname, [order].email, [order].phonenumber, book.bookauthor, book.bookprice, book.bookimage from [order] join book on [order].bookid = book.bookid where status =" + Status);
+            var data = connection.Query<Order>("select [order].orderid, [order].userid, [order].bookid, book.bookname, [order].quantity, [order].status, [order].fullname, [order].email, [order].phonenumber, book.bookauthor, book.bookprice, book.bookimage from [order] join book on [order].bookid = book.bookid where status =" + Status);
             return View(data);
 
         }
@@ -61,6 +61,48 @@ namespace bookecommercewebsite.Controllers
 
         }
 
+
+        public ActionResult Delete(int id)
+        {
+            if (HttpContext.Session.GetString("role") == "admin")
+            {
+                Order order = new Order();
+                using (IDbConnection db = new SqlConnection(Dapper.Connection))
+                {
+                   
+                    order = db.Query<Order>("select [order].orderid, [order].userid, [order].bookid, book.bookname, [order].quantity, [order].status, [order].fullname, [order].email, [order].phonenumber, book.bookauthor, book.bookprice, book.bookimage from[order] join book on[order].bookid = book.bookid where orderid = " + id, new { id }).SingleOrDefault();
+                }
+                return View(order);
+            }
+            else
+            {
+                return RedirectToAction(controllerName: "Login", actionName: "Index");
+            }
+        }
+
+        // POST: Customer/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id, Order bookcat)
+        {
+            if (HttpContext.Session.GetString("role") == "admin")
+            {
+               
+                    using (IDbConnection db = new SqlConnection(Dapper.Connection))
+                    {
+                      
+                        string sqlQuery = "Delete From [order] WHERE orderid = " + id;
+
+                        int rowsAffected = db.Execute(sqlQuery);
+                    }
+
+                    return RedirectToAction("Index");
+             
+            }
+            else
+            {
+                return RedirectToAction(controllerName: "Login", actionName: "Index");
+            }
+        }
 
 
     }

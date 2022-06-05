@@ -25,8 +25,8 @@ namespace bookecommercewebsite.Controllers
         }
         public ActionResult Details(int id)
         {
-            if (HttpContext.Session.GetString("role") == "customer")
-            {
+            //if (HttpContext.Session.GetString("role") == "customer")
+            //{
                 Book book = new Book();
                 using (IDbConnection db = new SqlConnection(Dapper.Connection))
                 {
@@ -34,11 +34,11 @@ namespace bookecommercewebsite.Controllers
                     book = db.Query<Book>("select book.bookid, book.bookname, book.bookauthor, book.bookprice, book.bookimage, bookcat.bookcatname from book inner join bookcat on book.bookcatid = bookcat.bookcatid WHERE Bookid =" + id, new { id }).SingleOrDefault();//only takes single value or default value
                 }
                 return View(book);
-            }
-            else
-            {
-                return RedirectToAction(controllerName: "Login", actionName: "Index");
-            }
+            //}
+            //else
+            //{
+            //    return RedirectToAction(controllerName: "Login", actionName: "Index");
+            //}
         }
 
         // POST: 
@@ -78,10 +78,11 @@ namespace bookecommercewebsite.Controllers
 
         public IActionResult addtocart(int id, Book book)
         {
+            if (HttpContext.Session.GetString("role") == "customer")
+            {
 
-          
 
-            using (IDbConnection db = new SqlConnection(Dapper.Connection))
+                using (IDbConnection db = new SqlConnection(Dapper.Connection))
             {
                 try
                 {
@@ -114,6 +115,13 @@ namespace bookecommercewebsite.Controllers
                
             }
             return RedirectToAction(controllerName: "cart", actionName: "Index");
+
+            }
+            else
+            {
+                return RedirectToAction(controllerName: "Login", actionName: "Index");
+            }
+
         }
 
       

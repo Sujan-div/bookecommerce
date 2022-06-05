@@ -25,6 +25,8 @@ namespace bookecommercewebsite.Models
 
         public virtual DbSet<Order> Orders { get; set; }
 
+        public virtual DbSet<Contact> Contacts { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

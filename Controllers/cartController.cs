@@ -15,16 +15,22 @@ namespace bookecommercewebsite.Controllers
     {
         public IActionResult Index()
         {
-            
-            
-            IDbConnection connection = new SqlConnection(Dapper.Connection);
+            if (HttpContext.Session.GetString("role") == "customer")
+            {
+
+                IDbConnection connection = new SqlConnection(Dapper.Connection);
             connection.Open();
             var data = connection.Query<Cart>("select cart.userid, cart.bookid, book.bookname, book.bookauthor, book.bookprice, book.bookimage from cart join book on cart.bookid = book.bookid where userid= "+  HttpContext.Session.GetString("userid"));
             return View(data);
+            }
+            else
+            {
+                return RedirectToAction(controllerName: "Login", actionName: "Index");
+            }
         }
 
-     
-       
+
+
 
         public IActionResult Checkout(int id)
         {
@@ -54,48 +60,54 @@ namespace bookecommercewebsite.Controllers
             //HttpContext.Session.SetString("status", statusdata);
 
 
-
-
-            using (IDbConnection db = new SqlConnection(Dapper.Connection))
+            if (HttpContext.Session.GetString("role") == "customer")
             {
-                try
+
+                using (IDbConnection db = new SqlConnection(Dapper.Connection))
                 {
+                    try
+                    {
 
-                    string sqlQuery = "update cart set status = @status where userid = @userid";
+                        string sqlQuery = "update cart set status = @status where userid = @userid";
 
-                    var rowsAffected = db.Execute(sqlQuery, new { userid = HttpContext.Session.GetString("userid"), status = 1 });
-
-
-
-                    string sqlQuery2 = "Insert Into [order] ( userid, bookid, cartid, quantity, [status]) select cart.userid, cart.bookid, cart.cartid, cart.quantity, cart.status from cart where status = @status and userid = @userid";
-
-                    var rowsAffected2 = db.Execute(sqlQuery2, new { userid = HttpContext.Session.GetString("userid"), status = 1 });
-
-
-                    
+                        var rowsAffected = db.Execute(sqlQuery, new { userid = HttpContext.Session.GetString("userid"), status = 1 });
 
 
 
+                        string sqlQuery2 = "Insert Into [order] ( userid, bookid, cartid, quantity, [status]) select cart.userid, cart.bookid, cart.cartid, cart.quantity, cart.status from cart where status = @status and userid = @userid";
 
-                    string sqlQuery3 = "delete from cart  where status = @status and userid = @userid";
+                        var rowsAffected2 = db.Execute(sqlQuery2, new { userid = HttpContext.Session.GetString("userid"), status = 1 });
 
-                    var rowsAffected3 = db.Execute(sqlQuery3, new { userid = HttpContext.Session.GetString("userid"), status = 1 });
+
+
+
+
+
+
+                        string sqlQuery3 = "delete from cart  where status = @status and userid = @userid";
+
+                        var rowsAffected3 = db.Execute(sqlQuery3, new { userid = HttpContext.Session.GetString("userid"), status = 1 });
+                    }
+                    catch (Exception ee)
+                    {
+
+                        //again run the delete query here.
+
+                        string sqlQuery4 = "delete from cart  where status = @status and userid = @userid";
+
+                        var rowsAffected4 = db.Execute(sqlQuery4, new { userid = HttpContext.Session.GetString("userid"), status = 1 });
+                    }
+                    return RedirectToAction(controllerName: "order", actionName: "Edit");
                 }
-                catch(Exception ee)
-                {
-
-                    //again run the delete query here.
-
-                    string sqlQuery4 = "delete from cart  where status = @status and userid = @userid";
-
-                    var rowsAffected4 = db.Execute(sqlQuery4, new { userid = HttpContext.Session.GetString("userid"), status = 1 });
-                }
-                return RedirectToAction(controllerName: "order", actionName: "Edit");
-            }
 
                 return RedirectToAction("Index");
-        }
 
+            }
+            else
+            {
+                return RedirectToAction(controllerName: "Login", actionName: "Index");
+            }
+        }
         public IActionResult ViewOrder()
         {
             int Status = 1;
