@@ -73,7 +73,7 @@ namespace bookecommercewebsite.Controllers
                     using (IDbConnection db = new SqlConnection(Dapper.Connection))
                     {
                         string imgext = Path.GetExtension(ifile.FileName);
-                        if (imgext == ".jpg" || imgext == ".gif")
+                        if (imgext == ".jpg" || imgext == ".gif" || imgext == ".PNG")
                         {
                             var saveimg = Path.Combine(webHostEnvironment.WebRootPath, ("Images"), ifile.FileName);
                             var stream = new FileStream(saveimg, FileMode.Create);
@@ -135,7 +135,7 @@ namespace bookecommercewebsite.Controllers
 
 
                 string imgext = Path.GetExtension(ifile.FileName);
-                if (imgext == ".jpg" || imgext == ".gif")
+                if (imgext == ".jpg" || imgext == ".gif" || imgext == ".PNG")
                 {
                     var a = DateTime.Now.Ticks + ifile.FileName;
                     var saveimg = Path.Combine(webHostEnvironment.WebRootPath, ("Images"), a);

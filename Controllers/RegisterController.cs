@@ -50,6 +50,8 @@ namespace bookecommercewebsite.Controllers
 
         public ActionResult Edit(int id)
         {
+            if (HttpContext.Session.GetString("role") == "admin" || HttpContext.Session.GetString("role") == "customer")
+            {
             User user = new User();
             string sql = "select * from [user] where userid=@userid";
             DynamicParameters parameters = new DynamicParameters();
@@ -58,13 +60,20 @@ namespace bookecommercewebsite.Controllers
 
             var data = Class1.RunQuery<User>(sql, parameters).SingleOrDefault();
             return View(data);
+
+            }
+            else
+            {
+                return RedirectToAction(controllerName: "Login", actionName: "Index");
+            }
         }
         [HttpPost]
         public ActionResult Edit(int id, User user)
         {
 
-
-            string sqlQuery = "UPDATE [user] set username=@username, useraddress=@useraddress, useremail=@useremail, usercontact=@usercontact, userpassword=@userpassword WHERE userid=@userid";
+            if (HttpContext.Session.GetString("role") == "admin" || HttpContext.Session.GetString("role") == "customer")
+            {
+                string sqlQuery = "UPDATE [user] set username=@username, useraddress=@useraddress, useremail=@useremail, usercontact=@usercontact, userpassword=@userpassword WHERE userid=@userid";
 
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@username", user.Username);
@@ -78,6 +87,12 @@ namespace bookecommercewebsite.Controllers
 
 
             return RedirectToAction(controllerName: "Users", actionName: "Index");
+
+            }
+            else
+            {
+                return RedirectToAction(controllerName: "Login", actionName: "Index");
+            }
 
         }
 

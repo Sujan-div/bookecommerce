@@ -91,7 +91,9 @@ namespace bookecommercewebsite.Controllers
         {
             HttpContext.Session.Remove("username");
             HttpContext.Session.Remove("role");
+            HttpContext.Session.Clear();
             return RedirectToAction("Index");
+           
         }
 
 
